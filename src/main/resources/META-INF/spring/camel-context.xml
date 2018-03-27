@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configures the Camel Context-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="techlab" />
+
+    <bean id="jmsConnectionFactory" class="org.apache.qpid.jms.JmsConnectionFactory">
+        <property name="remoteURI" value="amqp://localhost:5672" />
+        <property name="username" value="admin"/>
+        <property name="password" value="admin"/>
+    </bean>
+
+    <bean id="jmsCachingConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+        <property name="targetConnectionFactory" ref="jmsConnectionFactory" />
+    </bean>
+
+    <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration" >
+        <property name="connectionFactory" ref="jmsCachingConnectionFactory" />
+        <property name="cacheLevelName" value="CACHE_CONSUMER" />
+    </bean>
+
+    <bean id="amqp" class="org.apache.camel.component.amqp.AMQPComponent">
+        <property name="configuration" ref="jmsConfig" />
+    </bean>
+
+    <camelContext id="techlab-fuse-amqp" xmlns="http://camel.apache.org/schema/spring">
+
+        <route id="techlab-fuse-amqp-sample-route">
+            <from id="techlab-fuse-amqp-sample-route-starter" uri="timer:start"/>
+            <transform id="route-transform">
+                <method ref="myTransformer"/>
+            </transform>
+            <log id="log-body" message=">>> ${body}"/>
+        </route>
+        <route>
+            <from uri="timer:foo"/>
+            <log message="ok"/>
+            <setBody>
+                <constant>MESSAGE IS OK</constant>
+            </setBody>
+            <inOnly uri="amqp:queue:test"/>
+            <log message="sent..."/>
+            <setBody>
+                <constant>OK</constant>
+            </setBody>
+        </route>
+        <route>
+            <from uri="amqp:queue:test"/>
+            <log message="${body}"/>
+        </route>
+    </camelContext>
+
+</beans>
