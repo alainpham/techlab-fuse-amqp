@@ -50,5 +50,6 @@ To deploy this project on Fuse Karaf Server
 
       install -s file:_PROJECTPATH_/techlab-fuse-amqp/target/techlab-fuse-amqp-1.0-SNAPSHOT.jar
 
-- View logs
+- View
+
       log:tail
