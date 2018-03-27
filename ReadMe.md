@@ -42,7 +42,9 @@ To deploy this project on Fuse Karaf Server
 - Log into Fuse console and type the following commands
 - Install camel-amqp feature
       features:install camel-amqp
+
 - Install project bundle
       install -s file:_PROJECTPATH_/techlab-fuse-amqp/target/techlab-fuse-amqp-1.0-SNAPSHOT.jar
+
 - View logs
       log:tail
