@@ -2,7 +2,7 @@ Camel Spring Project techlab-fuse-amqp
 ===========================
 
 This project shows how to configure Fuse 6.3.0 on Karaf to use AMQP protocol 1.0 with AMQ 7 Broker or AMQ 6 Broker
-It also aims to show Openwire, AMQP interoperability. 
+It also aims to show Openwire and AMQP interoperability. 
 
 ## For AMQ 6 Broker embedded in Fuse Karaf Server
 - [Download jboss-fuse-karaf-6.3.0.redhat-xxx.zip here](https://developers.redhat.com/products/fuse/download/)
@@ -50,7 +50,7 @@ To deploy this project on Fuse Karaf Server
 - Install camel-amqp feature
 
         features:install camel-amqp
-        features:install camel-undertow
+        features:install camel-jetty
 
 - Install project bundle
 
@@ -60,9 +60,9 @@ To deploy this project on Fuse Karaf Server
 
       log:tail
 
-## View messages in a web browser application using MQTT or AMQP over Websockets
+## View messages in a web browser application using AMQP over Websockets
 
-(websockets on these protocols only work with AMQ 7 Broker)
+( AMQP over Websockets protocol only work with AMQ 7 Broker)
 
 - Open your browser and go to 
 

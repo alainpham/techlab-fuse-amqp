@@ -19,7 +19,7 @@ public class StaticContentLoader implements Processor, ResourceLoaderAware {
 
    private ResourceLoader resourceLoader;
 
-    private String rootFolder = "classpath:static";
+    private String rootFolder = "classpath:/static";
 
     public String getRootFolder() {
         return rootFolder;
@@ -45,7 +45,7 @@ public class StaticContentLoader implements Processor, ResourceLoaderAware {
         String relativepath = in.getHeader(Exchange.HTTP_PATH, String.class);
 
         if (relativepath.isEmpty() || relativepath.equals("/")) {
-            relativepath = "/index.html";
+            relativepath = "index.html";
         }
 
         Resource resource = this.getResource(rootFolder+"/"+relativepath);
