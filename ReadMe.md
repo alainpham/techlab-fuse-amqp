@@ -57,3 +57,11 @@ To deploy this project on Fuse Karaf Server
 - View
 
       log:tail
+
+## View messages in a web browser application using MQTT or AMQP over Websockets
+
+(websockets on these protocols only work with AMQ 7 Broker)
+
+- Open your browser and go to 
+
+        http://localhost:7123/

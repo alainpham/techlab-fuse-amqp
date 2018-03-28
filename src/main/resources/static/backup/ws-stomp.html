@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Messaging between AMQ 7 and browser with STOMP over websockets</title>
+    <script src="stomp.min.js"></script>
+    <script src="./../js/plotly-latest.min.js"></script>
+</head>
+<body>
+<h1>
+    Messaging between AMQ 7 and browser with STOMP over websockets
+</h1>
+<h2>Last message received : <span id="msg-content"> </span></h2>
+
+<div id="plot" style="width:800px;height:300px;"></div>
+
+
+<script>
+
+    var server = "ws://localhost:61613";
+
+    var plot = document.getElementById('plot');
+
+    var receivedMsg = [];
+
+    var client = Stomp.client( server, "v10.stomp" );
+
+    client.connect("admin", "admin", function() {
+            client.subscribe("/topic/test",
+            function (payload) {
+
+                console.log(payload);
+
+                document.getElementById("msg-content").innerHTML = payload.body;
+
+                receivedMsg.push(payload.body);
+
+                if (receivedMsg.length > 20) {
+                  receivedMsg.shift();
+                }
+
+                Plotly.update(plot, {
+                  y: [receivedMsg]
+                });
+
+            }
+            )
+        });
+
+
+
+
+    var style = {
+      margin: { t: 0 }
+    };
+    var data = [{
+      y: [0]
+    }];
+
+    Plotly.plot(plot, data, style);
+
+</script>
+
+</body>
+</html>
