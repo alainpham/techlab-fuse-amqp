@@ -29,6 +29,10 @@ This project shows how to configure Fuse 6.3.0 on Karaf to use AMQP protocol 1.0
 			cd ./../instances/eventbrk/bin
 			./artemis run
 
+    - create a test topic
+
+			./artemis address create --no-anycast --multicast --name test
+
 ## Build and run project
 
 To build this project use
