@@ -27,7 +27,8 @@
     client.subscribe("test");
 
     client.on("message", function (topic, payload) {
-
+        console.log(topic);
+        console.log(payload);
         console.log(payload.toString());
 
         document.getElementById("msg-content").innerHTML = payload.toString();

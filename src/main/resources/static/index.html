@@ -2,12 +2,64 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Testing interfaces for messaging</title>
+    <title>Messaging between AMQ 7 and browser with AMQP over Websockets</title>
+    <script src="js/rhea.js"></script>
+    <script src="js/plotly-latest.min.js"></script>
 </head>
 <body>
-    <h1>Testing interfaces for messaging (works only on AMQ 7 Broker)</h1>
-    <p><a href="ws-amqp.html">Demo with AMQP over websockets</a></p>
-    <p><a href="ws-mqtt.html">Demo with MQTT over websockets</a></p>
+<h1>
+    Messaging between AMQ 7 and browser with AMQP over Websockets
+</h1>
+<h2>Last message received : <span id="msg-content"> </span></h2>
+
+<div id="plot" style="width:800px;height:300px;"></div>
+
+
+<script>
+
+
+
+    var client = require("rhea");
+
+    var server = "ws://localhost:5672";
+
+    var plot = document.getElementById('plot');
+
+    var receivedMsg = [];
+
+    client.on("message", function (context) {
+
+        console.log(context.message.body);
+
+        document.getElementById("msg-content").innerHTML = context.message.body;
+
+        receivedMsg.push(context.message.body);
+
+        if (receivedMsg.length > 20) {
+          receivedMsg.shift();
+        }
+
+        Plotly.update(plot, {
+          y: [receivedMsg]
+        });
+
+    });
+
+    var ws = client.websocket_connect(WebSocket);
+    var connection = client.connect({"connection_details":ws(server, ["binary", "AMQPWSB10", "amqp"]), "reconnect":true});
+    connection.open_receiver("test");
+
+
+    var style = {
+      margin: { t: 0 }
+    };
+    var data = [{
+      y: [0]
+    }];
+
+    Plotly.plot(plot, data, style);
+
+</script>
 
 </body>
 </html>

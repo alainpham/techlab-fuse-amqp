@@ -48,7 +48,7 @@ public class StaticContentLoader implements Processor, ResourceLoaderAware {
             relativepath = "/index.html";
         }
 
-        Resource resource = this.getResource(rootFolder+relativepath);
+        Resource resource = this.getResource(rootFolder+"/"+relativepath);
 
         String mimeType;
         Message out = exchange.getOut();
